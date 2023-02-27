@@ -37,10 +37,14 @@ def buyLotsOfFruit(orderList):
 
     for i in range(len(orderList)):
         item = orderList[i][0]
-        qty = orderList[i][1]
-        price = fruitPrices[item]
-        totalCost += qty*price
-    return totalCost
+        if item in orderList:
+          qty = orderList[i][1]
+          price = fruitPrices[item]
+          totalCost += qty*price
+          return totalCost
+        else:
+          output = "An item in the order list is unavailable"
+          return output
 
 # Main Method
 if __name__ == '__main__':
