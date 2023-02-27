@@ -34,17 +34,16 @@ def buyLotsOfFruit(orderList):
     """
     totalCost = 0.0
     "*** YOUR CODE HERE ***"
-
     for i in range(len(orderList)):
-        item = orderList[i][0]
-        if item in orderList:
+      try:
+          item = orderList[i][0]
           qty = orderList[i][1]
           price = fruitPrices[item]
           totalCost += qty*price
-          return totalCost
-        else:
-          output = "An item in the order list is unavailable"
-          return output
+      except Exception as e:      
+        print( item +" are not available")
+      
+    return totalCost
 
 # Main Method
 if __name__ == '__main__':
