@@ -40,8 +40,9 @@ def buyLotsOfFruit(orderList):
           qty = orderList[i][1]
           price = fruitPrices[item]
           totalCost += qty*price
-      except Exception as e:      
+      except:      
         print( item +" are not available")
+        return None
       
     return totalCost
 
