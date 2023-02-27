@@ -29,19 +29,17 @@ def shopSmart(orderList, fruitShops):
         fruitShops: List of FruitShops
     """
     "*** YOUR CODE HERE ***"
-    total1 = 0.0
-    total2 = 0.0
-    for i in range(len(orderList)):
-        item = orderList[i][0]
-        qty = orderList[i][1]
-        cost1 = fruitShops[0].fruitPrices[item]
-        total1 += cost1 * qty
-        cost2 = fruitShops[1].fruitPrices[item]
-        total2 += cost2 * qty
-    if (total1) < (total2):
-      return fruitShops[0]
-    else:
-      return fruitShops[1]
+    min_total = float('inf')  # initialize the minimum total cost to a very large number
+    min_index = -1  # initialize the index of the fruit shop with the minimum total cost to -1
+    for i in range(len(fruitShops)):
+        total = 0.0
+        for item, qty in orderList:
+            cost = fruitShops[i].fruitPrices[item]
+            total += cost * qty
+        if total < min_total:
+            min_total = total
+            min_index = i
+    return fruitShops[min_index]
 
 if __name__ == '__main__':
   "This code runs when you invoke the script from the command line"
