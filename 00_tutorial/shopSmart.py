@@ -31,8 +31,6 @@ def shopSmart(orderList, fruitShops):
     "*** YOUR CODE HERE ***"
     total1 = 0.0
     total2 = 0.0
-
-    print(len(orderList))
     for i in range(len(orderList)):
         item = orderList[i][0]
         qty = orderList[i][1]
@@ -40,10 +38,10 @@ def shopSmart(orderList, fruitShops):
         total1 += cost1 * qty
         cost2 = fruitShops[1].fruitPrices[item]
         total2 += cost2 * qty
-        if (total1) < (total2):
-            return fruitShops[0]
-        else:
-            return fruitShops[1]
+    if (total1) < (total2):
+      return fruitShops[0]
+    else:
+      return fruitShops[1]
 
 if __name__ == '__main__':
   "This code runs when you invoke the script from the command line"
@@ -53,9 +51,6 @@ if __name__ == '__main__':
   dir2 = {'apples': 1.0, 'oranges': 5.0}
   shop2 = shop.FruitShop('shop2',dir2)
   shops = [shop1, shop2]
-#   print("For orders ", orders, ", the best shop is", shopSmart(orders, shops).getName())
-#   orders = [('apples',3.0)]
-#   print("For orders: ", orders, ", the best shop is", shopSmart(orders, shops).getName())
-  print(shopSmart(orders, shops).getName())
-#   orders = [('apples',3.0)]
-#   print(shopSmart(orders, shops).getName())
+  print("For orders ", orders, ", the best shop is", shopSmart(orders, shops).getName())
+  orders = [('apples',3.0)]
+  print("For orders: ", orders, ", the best shop is", shopSmart(orders, shops).getName())
