@@ -92,8 +92,8 @@ def depthFirstSearch(problem):
     # Create an empty stack to store the nodes to be explored
     fringe = Stack()
 
-    # Create an empty list to store the explored states
-    explored = []
+    # Create an empty set to store the explored states
+    explored = set()
 
     # Get the starting state of the problem
     startState = problem.getStartState()
@@ -114,7 +114,7 @@ def depthFirstSearch(problem):
             continue
 
         # Add the current state to the explored list
-        explored.append(currentState)
+        explored.add(currentState)
 
         # If the current state is the goal state, return the list of actions
         if problem.isGoalState(currentState):
@@ -123,13 +123,18 @@ def depthFirstSearch(problem):
         # Otherwise, get the successors of the current state and add them to the fringe
         successors = problem.getSuccessors(currentState)
 
+        
         for succState, succAction, succCost in successors:
+            # Create a new action sequence by appending the current action to the previous actions
             newAction = actions + [succAction]
+            # Create a new node by combining the successor state with the new action sequence
             newNode = (succState, newAction)
+            # Add the new node to the fringe to be explored later
             fringe.push(newNode)
 
+
     # If there are no more nodes to explore and the goal state has not been found, return None
-    return None
+    return 0
 
 
 
@@ -143,8 +148,8 @@ def breadthFirstSearch(problem):
     # Create an empty queue to store the nodes to be explored
     fringe = Queue()
 
-    # Create an empty list to store the explored states
-    explored = []
+    # Create an empty set to store the explored states
+    explored = set()
 
     # Get the starting state of the problem
     startState = problem.getStartState()
@@ -165,7 +170,7 @@ def breadthFirstSearch(problem):
             continue
 
         # Add the current state to the explored list
-        explored.append(currentState)
+        explored.add(currentState)
 
         # If the current state is the goal state, return the list of actions
         if problem.isGoalState(currentState):
@@ -175,15 +180,18 @@ def breadthFirstSearch(problem):
         successors = problem.getSuccessors(currentState)
 
         for succState, succAction, succCost in successors:
+            # Create a new action sequence by appending the current action to the previous actions
             newAction = actions + [succAction]
+            # Create a new node by combining the successor state with the new action sequence
             newNode = (succState, newAction)
+            # Add the new node to the fringe to be explored
             fringe.push(newNode)
 
     # If there are no more nodes to explore and the goal state has not been found, return None
-    return None
+    return 0
 
 
-    util.raiseNotDefined()
+    # util.raiseNotDefined()
 
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
@@ -193,8 +201,8 @@ def uniformCostSearch(problem):
     # Create an empty priority queue to store the nodes to be explored
     fringe = PriorityQueue()
 
-    # Create an empty list to store the explored states
-    explored = []
+    # Create an empty set to store the explored states
+    explored = set()
 
     # Get the starting state of the problem
     startState = problem.getStartState()
@@ -203,7 +211,7 @@ def uniformCostSearch(problem):
     startNode = (startState, [], 0)
 
     # Add the starting node to the fringe with a priority of 0
-    fringe.push(startNode, 0)
+    fringe.update(startNode, 0)
 
     # While there are nodes to explore
     while not fringe.isEmpty():
@@ -215,7 +223,7 @@ def uniformCostSearch(problem):
             continue
 
         # Add the current state to the explored list
-        explored.append(currentState)
+        explored.add(currentState)
 
         # If the current state is the goal state, return the list of actions
         if problem.isGoalState(currentState):
@@ -231,8 +239,8 @@ def uniformCostSearch(problem):
             fringe.push(newNode, newCost)
 
     # If there are no more nodes to explore and the goal state has not been found, return None
-    return None
-    util.raiseNotDefined()
+    return 0
+    # util.raiseNotDefined()
 
 def nullHeuristic(state, problem=None):
     """
@@ -250,8 +258,8 @@ def aStarSearch(problem, heuristic=nullHeuristic):
     # Create an empty priority queue to store the nodes to be explored
     fringe = PriorityQueue()
     
-    # Create an empty list to store the explored states
-    explored = []
+    # Create an empty set to store the explored states
+    explored = set()
     
     # Get the starting state of the problem
     startState = problem.getStartState()
@@ -272,7 +280,7 @@ def aStarSearch(problem, heuristic=nullHeuristic):
             continue
         
         # Add the current state to the explored list
-        explored.append(currentState)
+        explored.add(currentState)
     
         # If the current state is the goal state, return the list of actions
         if problem.isGoalState(currentState):
@@ -289,8 +297,8 @@ def aStarSearch(problem, heuristic=nullHeuristic):
             fringe.push(newNode, newCost + newEstimatedCost)
     
     # If there are no more nodes to explore and the goal state has not been found, return None
-    return None
-    util.raiseNotDefined()
+    return 0
+    # util.raiseNotDefined()
 
 
 # Abbreviations
