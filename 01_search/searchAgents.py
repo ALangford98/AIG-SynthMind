@@ -309,9 +309,13 @@ class CornersProblem(search.SearchProblem):
         Returns whether this search state is a goal state of the problem.
         """
         "*** YOUR CODE HERE ***"
-        _, visitedCorners = state
-        return len(visitedCorners) == len(self.corners)
-        util.raiseNotDefined()
+        # the variable '_' is the current position and therefore ignored
+        _, visitedCorners = state 
+        # Check to see if the number of visited corners is equal to the total number of corners
+        # If the number of visited corners is equal to the total number of corners, the function returns True, 
+        # indicating that the given state is a goal state. Otherwise, it returns False
+        return len(visitedCorners) == len(self.corners)  
+        # util.raiseNotDefined()
 
     def getSuccessors(self, state):
         """
@@ -387,25 +391,28 @@ def cornersHeuristic(state, problem):
     corners = problem.corners # These are the corner coordinates
     walls = problem.walls # These are the walls of the maze, as a Grid (game.py)
     "*** YOUR CODE HERE ***"
+    # Create an empty list to store the corners that have not been visited yet
     remaining_corners = []
+    # Iterate through each corner and add it to the list of remaining corners if it has not been visited yet
     for corner in corners:
         if corner not in state[1]:
             remaining_corners.append(corner)
+    # If there are no remaining corners, then the goal has been reached and the heuristic value is 0
     if not remaining_corners:
         return 0
+    # Get the current position from the current state
     current_position = state[0]
-
-    # Find the shortest path distance to the nearest unvisited corner using BFS
-    from search import breadthFirstSearch
-    distances = []
+    # Initialize the total distance to 0
+    total_distance = 0
+    # Iterate through each remaining corner and calculate the Manhattan distance between the current position and the corner
     for corner in remaining_corners:
-        # problem_corners = list(remaining_corners)
-        # problem_corners.remove(corner)
-        problem = CornersProblem(startingGameState=current_position)
-        distances.append(breadthFirstSearch(problem))
-
-    # Use the minimum distance as the heuristic value
-    return min(distances)
+        distance = abs(current_position[0]-corner[0]) + abs(current_position[1]-corner[1])
+        # Add the distance to the total distance
+        total_distance += distance
+        # Update the current position to be the corner
+        current_position = corner
+    # Return the total distance as the heuristic value
+    return total_distance
 
     
 
@@ -538,7 +545,21 @@ def foodHeuristic(state, problem):
     """
     position, foodGrid = state
     "*** YOUR CODE HERE ***"
-    return 0
+    foodList = foodGrid.asList()
+    if not foodList:
+        return 0
+
+    # Compute the distances between the current position and all remaining food
+    distances = [util.manhattanDistance(position, food) for food in foodList]
+
+    # Find the closest food
+    minDistance = min(distances)
+
+    # Compute a heuristic value that takes into account the closest food
+    # and the remaining number of food
+    heuristic = minDistance + (len(foodList) - 1) * minDistance
+
+    return heuristic
 
 class ClosestDotSearchAgent(SearchAgent):
     "Search for all food using a sequence of searches"
@@ -563,13 +584,34 @@ class ClosestDotSearchAgent(SearchAgent):
         gameState.
         """
         # Here are some useful elements of the startState
-        startPosition = gameState.getPacmanPosition()
-        food = gameState.getFood()
-        walls = gameState.getWalls()
-        problem = AnyFoodSearchProblem(gameState)
-
+        startPosition = gameState.getPacmanPosition() # get Pacman's position
+        food = gameState.getFood() # get the food layout
+        walls = gameState.getWalls() # get the wall layout
+        problem = AnyFoodSearchProblem(gameState) # create a search problem to find the closest food dot
+    
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        from util import PriorityQueue
+        # Apply the UCS search algorithm to find the path to the closest food dot
+        fringe = PriorityQueue() # create a priority queue for the search
+        fringe.update((startPosition, []), 0) # add the start position to the priority queue with an initial cost of 0
+    
+        explored = set() # initialize a set to keep track of visited nodes
+    
+        while fringe:
+            node, actions = fringe.pop() # get the node with the lowest cost and its corresponding actions
+    
+            if problem.isGoalState(node): # if the node is a goal state (i.e. a food dot), return the actions to reach that node
+                return actions
+    
+            if node not in explored: # if the node hasn't been visited yet
+                explored.add(node) # add the node to the set of explored nodes
+                for successor, action, cost in problem.getSuccessors(node): # get the successors of the current node
+                    new_actions = actions + [action] # add the current action to the list of actions to reach the successor node
+                    new_cost = problem.getCostOfActions(new_actions) # calculate the cost of the new actions
+                    fringe.push((successor, new_actions), new_cost) # add the successor node and its actions to the priority queue with the new cost
+    
+        return [] # No path found
+        # util.raiseNotDefined()
 
 class AnyFoodSearchProblem(PositionSearchProblem):
     """
@@ -605,7 +647,11 @@ class AnyFoodSearchProblem(PositionSearchProblem):
         x,y = state
 
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        # Unpack the state tuple into x and y variables representing the row and column of the position
+        x, y = state
+        # return True if there is food at the current position (x, y) in the self.food list, and False otherwise
+        return self.food[x][y]
+        # util.raiseNotDefined()
 
 def mazeDistance(point1, point2, gameState):
     """
