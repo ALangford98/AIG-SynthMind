@@ -148,8 +148,8 @@ def breadthFirstSearch(problem):
     # Create an empty queue to store the nodes to be explored
     fringe = Queue()
 
-    # Create an empty set to store the explored states
-    explored = set()
+    # Create an empty list to store the explored states
+    explored = []
 
     # Get the starting state of the problem
     startState = problem.getStartState()
@@ -161,7 +161,7 @@ def breadthFirstSearch(problem):
     fringe.push(startNode)
 
     # While there are nodes to explore
-    while not fringe.isEmpty():
+    while fringe:
         # Pop the next node from the fringe
         currentState, actions = fringe.pop()
 
@@ -170,7 +170,7 @@ def breadthFirstSearch(problem):
             continue
 
         # Add the current state to the explored list
-        explored.add(currentState)
+        explored.append(currentState)
 
         # If the current state is the goal state, return the list of actions
         if problem.isGoalState(currentState):
@@ -214,7 +214,7 @@ def uniformCostSearch(problem):
     fringe.update(startNode, 0)
 
     # While there are nodes to explore
-    while not fringe.isEmpty():
+    while fringe:
         # Pop the node with the lowest priority (i.e. lowest cost) from the fringe
         currentState, actions, cost = fringe.pop()
 
@@ -232,11 +232,11 @@ def uniformCostSearch(problem):
         # Otherwise, get the successors of the current state and add them to the fringe with their costs
         successors = problem.getSuccessors(currentState)
 
-        for succState, succAction, succCost in successors:
-            newAction = actions + [succAction]
-            newCost = cost + succCost
-            newNode = (succState, newAction, newCost)
-            fringe.push(newNode, newCost)
+        for succState, succAction, succCost in successors: # get the successors of the current node
+            newAction = actions + [succAction]# add the current action to the list of actions to reach the successor node
+            newCost = cost + succCost # calculate the cost of the new actions
+            newNode = (succState, newAction, newCost) # create the successor node and its actions
+            fringe.push(newNode, newCost) # add the successor node to the priority queue with the new cost
 
     # If there are no more nodes to explore and the goal state has not been found, return None
     return 0
@@ -259,7 +259,7 @@ def aStarSearch(problem, heuristic=nullHeuristic):
     fringe = PriorityQueue()
     
     # Create an empty set to store the explored states
-    explored = set()
+    explored = []
     
     # Get the starting state of the problem
     startState = problem.getStartState()
@@ -280,7 +280,7 @@ def aStarSearch(problem, heuristic=nullHeuristic):
             continue
         
         # Add the current state to the explored list
-        explored.add(currentState)
+        explored.append(currentState)
     
         # If the current state is the goal state, return the list of actions
         if problem.isGoalState(currentState):
@@ -290,11 +290,11 @@ def aStarSearch(problem, heuristic=nullHeuristic):
         successors = problem.getSuccessors(currentState)
     
         for succState, succAction, succCost in successors:
-            newAction = actions + [succAction]
-            newCost = cost + succCost
-            newEstimatedCost = heuristic(succState, problem)
-            newNode = (succState, newAction, newCost, newEstimatedCost)
-            fringe.push(newNode, newCost + newEstimatedCost)
+            newAction = actions + [succAction] # Compute the new action list by adding the successor action to the current action list
+            newCost = cost + succCost # Compute the new cost by adding the successor cost to the current cost
+            newEstimatedCost = heuristic(succState, problem) # Estimate the remaining cost to reach the goal using the heuristic function
+            newNode = (succState, newAction, newCost, newEstimatedCost)# Create a new node consisting of the successor state, new action list, new cost, and estimated remaining cost
+            fringe.push(newNode, newCost + newEstimatedCost)# Add the new node to the priority queue with priority equal to the sum of the new cost and estimated remaining cost
     
     # If there are no more nodes to explore and the goal state has not been found, return None
     return 0
