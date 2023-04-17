@@ -237,7 +237,7 @@ class MinimaxAgent(MultiAgentSearchAgent):
                 return min((minimax(state.generateSuccessor(agentIndex, action), depth, nextAgentIndex)[0], action) for action in actions)
 
           # Call the minimax function on the initial game state with the specified depth and starting agent
-        temp, action = minimax(gameState, self.depth, 0)
+        _, action = minimax(gameState, self.depth, 0)
          # Return the action with the highest value
         return action
       
