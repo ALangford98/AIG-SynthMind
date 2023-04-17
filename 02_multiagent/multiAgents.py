@@ -301,47 +301,47 @@ class ExpectimaxAgent(MultiAgentSearchAgent):
           legal moves.
         """
         "*** YOUR CODE HERE ***"
-        # def expectimax(state, depth, agent):
-        #     # Base case: either the search has reached the maximum depth or the game has ended
-        #     if depth == 0 or state.isWin() or state.isLose():
-        #         return self.evaluationFunction(state), None
+        def expectimax(state, depth, agent):
+            # Base case: either the search has reached the maximum depth or the game has ended
+            if depth == 0 or state.isWin() or state.isLose():
+                return self.evaluationFunction(state), None
 
-        #     # Check if current agent is the maximizing player (Pacman)
-        #     if agent == 0:
-        #         maxVal = float('-inf')
-        #         maxAction = None
-        #         # Loop through legal actions of current agent and find the maximum value and corresponding action
-        #         for action in state.getLegalActions(agent):
-        #             successor = state.generateSuccessor(agent, action)
-        #             val, _ = expectimax(successor, depth, agent+1)
-        #             if val > maxVal:
-        #                 maxVal = val
-        #                 maxAction = action
-        #         return maxVal, maxAction
+            # Check if current agent is the maximizing player (Pacman)
+            if agent == 0:
+                maxVal = float('-inf')
+                maxAction = None
+                # Loop through legal actions of current agent and find the maximum value and corresponding action
+                for action in state.getLegalActions(agent):
+                    successor = state.generateSuccessor(agent, action)
+                    val, _ = expectimax(successor, depth, agent+1)
+                    if val > maxVal:
+                        maxVal = val
+                        maxAction = action
+                return maxVal, maxAction
 
-        #     # If agent is not the maximizing player, then it is the minimizing player (Ghost)
-        #     else:
-        #         totalVal = 0
-        #         numActions = 0
-        #         nextAgent = agent + 1
-        #         # If all agents have taken their turn, start from the first agent and decrement the depth
-        #         if state.getNumAgents() == nextAgent:
-        #             nextAgent = 0
-        #             depth -= 1
-        #         # Loop through legal actions of current agent and calculate the total value
-        #         for action in state.getLegalActions(agent):
-        #             successor = state.generateSuccessor(agent, action)
-        #             val, _ = expectimax(successor, depth, nextAgent)
-        #             totalVal += val
-        #             numActions += 1
-        #         # Calculate the average value of all legal actions
-        #         avgVal = totalVal / numActions
-        #         return avgVal, None
+            # If agent is not the maximizing player, then it is the minimizing player (Ghost)
+            else:
+                totalVal = 0
+                numActions = 0
+                nextAgent = agent + 1
+                # If all agents have taken their turn, start from the first agent and decrement the depth
+                if state.getNumAgents() == nextAgent:
+                    nextAgent = 0
+                    depth -= 1
+                # Loop through legal actions of current agent and calculate the total value
+                for action in state.getLegalActions(agent):
+                    successor = state.generateSuccessor(agent, action)
+                    val, _ = expectimax(successor, depth, nextAgent)
+                    totalVal += val
+                    numActions += 1
+                # Calculate the average value of all legal actions
+                avgVal = totalVal / numActions
+                return avgVal, None
 
-        # # Call the expectimax function with the current game state, maximum depth, and initial agent
-        # _, action = expectimax(gameState, self.depth, 0)
-        # # Return the best action determined by the expectimax algorithm
-        # return action  
+        # Call the expectimax function with the current game state, maximum depth, and initial agent
+        _, action = expectimax(gameState, self.depth, 0)
+        # Return the best action determined by the expectimax algorithm
+        return action  
        
 def betterEvaluationFunction(currentGameState):
     """
