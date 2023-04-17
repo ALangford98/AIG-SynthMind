@@ -354,6 +354,29 @@ def betterEvaluationFunction(currentGameState):
       - Try to scare the ghosts by eating the pellets -DONE
       - If the ghosts are scared, chase them. distToGhost = min(distsToGhosts) -DONE
       - Avoid them otherwise -DONE
+
+      
+        1. The function starts by extracting some information from the currentGameState object, which represents the current state of the game. Specifically, 
+        it gets the position of the Pac-Man player (pacmanPos), the layout of the game board (represented as a grid of food pellets, which are True if they exist and False otherwise), 
+        a list of the positions of any capsules (power pellets that make ghosts vulnerable when eaten), a list of the states of all the ghosts 
+        (including their positions and whether they are currently scared), and a list of the remaining scared times for each ghost (scaredTimes).
+    
+        2. The function then calculates the distance to the nearest food pellet (distToFood) using the manhattanDistance function, which measures the Manhattan distance 
+        (i.e., the sum of the absolute differences of the x- and y-coordinates) between Pac-Man's position and each food pellet, and takes the minimum of these distances. 
+        If there are no food pellets left on the board, distToFood is set to 0.
+    
+        3. The function also calculates the distance to the nearest ghost (distToGhost) using the manhattanDistance function and the list of ghost states. 
+        If at least one ghost is currently scared (i.e., has a positive value in its scaredTimer attribute), Pac-Man prioritizes eating that ghost and sets distToGhost to 
+        the minimum of the distances to all scared ghosts. Otherwise, Pac-Man avoids ghosts and sets distToGhost to the maximum of the distances to all ghosts.
+    
+        4. The function then updates the score by adding rewards and penalties based on the values calculated in steps 2 and 3. Specifically, it adds a reward proportional 
+        to the inverse of distToFood plus 1, which incentivizes Pac-Man to move towards food pellets. It subtracts a penalty proportional to the inverse of distToGhost plus 1, 
+        which penalizes Pac-Man for being too close to a ghost. It adds a reward equal to the number of capsules remaining, which incentivizes Pac-Man to eat capsules. It adds 
+        a reward proportional to the total remaining scared time for all ghosts, which incentivizes Pac-Man to chase scared ghosts. And it subtracts a penalty proportional to the 
+        number of remaining food pellets, which incentivizes Pac-Man to eat as much food as possible before completing the level.
+    
+        5. Finally, the function returns the updated score as its output. This score is used by the game engine to determine how well Pac-Man is doing and to guide its decision-making.
+
     """
     "*** YOUR CODE HERE ***"
     
@@ -380,11 +403,11 @@ def betterEvaluationFunction(currentGameState):
 
     # Add rewards and penalties to the score
     score = currentGameState.getScore()
-    score += 1.0 / (distToFood + 1) 
+    score += 1.0 / (distToFood + 1) # Reward moves towards food
     score -= 1.0 / (distToGhost + 1)# Penalty for being close to a ghost
-    score += len(capsules) # Reward for eating power pellets
+    score += len(capsules) # Reward for eating capsules
     score += 10 * sum(scaredTimes) # Reward for chasing scared ghosts
-    score -= 10 * len(foodList) # Penalty for remaining food pellets
+    score -= 10 * len(foodList) # Penalty for remaining food
 
     return score
 
