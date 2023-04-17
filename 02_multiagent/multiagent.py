@@ -216,7 +216,7 @@ class MinimaxAgent(MultiAgentSearchAgent):
           Returns the total number of agents in the game
         """
         def minimax(state, depth, agentIndex):
-            # Base case: if we've reached the desired depth or the game is over, return the evaluation function value and no action
+            # if we've reached the desired depth or the game is over, return the evaluation function value and no action
             if depth == 0 or state.isWin() or state.isLose():
                 return self.evaluationFunction(state), None
             
